@@ -1,4 +1,4 @@
-# 🎨 PlasticModelApp.Pubilc 🤖
+# 🎨 PlasticModelApp.Public 🤖
 x29generalのポートフォリオ "PlasticModelApp" 公開用リポジトリ。
 
 ## 1. 概要
@@ -83,7 +83,7 @@ sequenceDiagram
 
 - オニオンアーキテクチャ
 - ドメインモデル中心設計
-- 責務分離（Controller / Application / Domain / Infra)
+- 責務分離（Controller / Application / Domain / Infra レイヤー）
 
 ---
 

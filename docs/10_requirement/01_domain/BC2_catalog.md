@@ -30,7 +30,6 @@ Catalogコンテキストのドメインモデリング。
 | - | - |
 | PaintId | 塗料を一意に特定するための識別子。 |
 | Name | 塗料の名称。 |
-| ColorSpec | 色見本の値。HEX/RGB/HSLを保持する。 |
 | HexColor | 色見本の値（HEX）。 `#RRGGBB`の形式。 |
 | RgbColor | 色見本の値（RGB）。 `[R, G, B]`の形式。 それぞれ `0 ~ 255`の値。 |
 | HslColor | 色見本の値（HSL）。 `[H, S, L]`の形式。Hは `0 ~ 360`、Sは `0 ~ 100`、Lは `0 ~ 100`。 |

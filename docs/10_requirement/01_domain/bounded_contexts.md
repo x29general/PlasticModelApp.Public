@@ -17,21 +17,21 @@ PlasticModelAppの **境界づけられたコンテキスト** (Bounded Context,
 graph TD
     Auth[Auth<br/>認証・認可]
     Catalog[Catalog<br/>塗料カタログ]
-    Operations[Operations<br/>在庫管理]
+    Operation[Operation<br/>在庫管理]
     Selection[Selection<br/>選定機能]
 
     Auth -->|Conformist| Catalog
-    Auth -->|Conformist| Operations
+    Auth -->|Conformist| Operation
     Auth -->|Conformist| Selection
 
-    Catalog -->|Customer/Supplier| Operations
+    Catalog -->|Customer/Supplier| Operation
     Catalog -->|Customer/Supplier| Selection
 
-    Operations -.->|Independent| Selection
+    Operation -.->|Independent| Selection
 
     style Auth fill:#e1f5ff,stroke:#01579b,stroke-width:2px
     style Catalog fill:#fff3e0,stroke:#e65100,stroke-width:2px
-    style Operations fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    style Operation fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
     style Selection fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
 ```
 

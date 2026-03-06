@@ -22,7 +22,7 @@ x29generalのポートフォリオ "PlasticModelApp" 公開用リポジトリ。
 ```mermaid
 flowchart LR
     Client --> BlazorWASM
-    BlazorWASM --> ASPNETAPI
+    BlazorWASM --> ASP.NETAPI
     ASPNETAPI --> PostgreSQL
 ```
 
@@ -33,14 +33,15 @@ flowchart LR
     Client --> CloudFront
     CloudFront --> S3
     Client --> ALB
-    ALB --> ECS
-    ECS --> RDS
+    ALB --> Fargate
+    Fargate --> RDS
 ```
 
 ---
 
 ## 3. 技術スタック
 
+### 現在の技術スタック：
 | Layer        | Technology                        |
 | ------------ | --------------------------------- |
 | Frontend     | Blazor WebAssembly                |
@@ -50,7 +51,17 @@ flowchart LR
 | ORM          | Entity Framework Core             |
 | Auth         | Google OAuth + JWT                |
 | Hosting      | Render.com                        |
-| Future Infra | AWS (S3 / CloudFront / ECS / RDS) |
+
+### 将来の技術スタック：
+| Layer        | Technology                        |
+| ------------ | --------------------------------- |
+| Frontend     | React                             |
+| Backend      | ASP.NET Core Web API              |
+| Language     | C#                                |
+| Database     | PostgreSQL                        |
+| ORM          | Entity Framework Core             |
+| Auth         | Google OAuth + JWT                |
+| Infra        | AWS (S3 / CloudFront / Fargate / RDS) |
 
 ---
 
@@ -134,12 +145,11 @@ Swagger により詳細仕様を確認可能。
 ### 現在
 
 - Render.com にてホスティングおよびDB接続
-- PostgreSQL 外部接続
 
 ### 将来
 
 - Frontend：S3 + CloudFront
-- API：ECS Fargate + ALB
+- API：Fargate + ALB
 - DB：RDS for PostgreSQL
 - Secrets：SSM / Secrets Manager
 - Monitoring：CloudWatch

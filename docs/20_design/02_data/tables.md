@@ -15,7 +15,7 @@
 | price               | numeric(10,2)             | NOT NULL    |                                   | |
 | description         | varchar(500)              |             |                                   | |
 | image_url           | varchar(200)              |             |                                   | |
-| hex                 | text                      | NOT NULL    |                                   | |
+| hex                 | varchar(7)                | NOT NULL    |                                   | |
 | rgb_r               | integer                   | NOT NULL    |                                   | |
 | rgb_g               | integer                   | NOT NULL    |                                   | |
 | rgb_b               | integer                   | NOT NULL    |                                   | |

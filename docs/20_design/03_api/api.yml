@@ -1,0 +1,512 @@
+openapi: 3.0.0
+info:
+  title: Plastic Model App API
+  description: Plastic Model App の API ドキュメント。
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: ローカル Docker サーバー
+
+paths:
+  /healthz:
+    get:
+      summary: Health Check
+      description: API のヘルス状態を確認します。
+      tags:
+        - Health
+      x-number: [API-001]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Status:
+                    type: string
+                    example: "ok"
+
+  /health/db:
+    get:
+      summary: Database Health Check
+      description: データベース接続の状態を確認します。
+      tags:
+        - Health
+      responses:
+        "200":
+          description: データベース接続正常
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "ok"
+        "503":
+          description: データベース接続エラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+
+  /api/paints/search:
+    post:
+      summary: 塗料検索
+      description: 各種条件で塗料を検索します。
+      tags:
+        - Paints
+      x-usecases: [UC-U-01]
+      x-functions: [FR001, FR002, FR003]
+      x-phase: [Phase1]
+      x-number: [API-003]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaintSearchCriteria"
+      responses:
+        "200":
+          description: 検索条件に一致する塗料の一覧。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaintListResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /api/paints/color-search:
+    post:
+      summary: 類似色検索
+      description: 選択された色に基づいて類似色の塗料を検索します。
+      tags:
+        - Paints
+      x-usecases: [UC-U-03, UC-U-04]
+      x-functions: [FR006, FR008]
+      x-phase: [Phase2]
+      x-number: [API-004]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ColorSearchCriteria"
+      responses:
+        "200":
+          description: 選択された色に類似する塗料の一覧。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimilarPaintListResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /api/paints/{id}:
+    get:
+      summary: 塗料詳細を取得
+      description: 指定した ID の塗料の詳細情報を取得します。
+      tags:
+        - Paints
+      x-usecases: [UC-U-02]
+      x-functions: [FR005]
+      x-phase: [Phase1]
+      x-number: [API-005]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the paint to retrieve.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: 指定した塗料の詳細情報。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaintResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /api/masters:
+    get:
+      summary: マスタデータ取得
+      description: ブランド、塗料タイプ、光沢レベル、タグなどのマスタデータを取得します。
+      tags:
+        - Masters
+      x-usecases: [UC-U-01]
+      x-functions: [FR001, FR002, FR003]
+      x-phase: [Phase1]
+      x-number: [API-002]
+      responses:
+        "200":
+          description: ブランド、塗料タイプ、光沢レベル、タグなどを含むマスタデータ。
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Brands:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Id:
+                          type: string
+                        Name:
+                          type: string
+                  PaintTypes:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Id:
+                          type: string
+                        Name:
+                          type: string
+                  Glosses:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Id:
+                          type: string
+                        Name:
+                          type: string
+                  Tags:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/TagResponse"
+                  TagCategories:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Id:
+                          type: string
+                        Name:
+                          type: string
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+components:
+  responses:
+    BadRequest:
+      description: バリデーションエラー
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+    NotFound:
+      description: リソースが見つかりません
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            Error:
+              Status: 404
+              Code: E-404-01
+              Message: リソースが見つかりません
+              Details:
+                - Field: id
+                  Issue: "指定されたIDのペイントが存在しません"
+              Timestamp: "2023-10-01T12:00:00Z"
+
+    InternalServerError:
+      description: サーバー内部エラー
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            Error:
+              Status: 500
+              Code: E-500-01
+              Message: サーバー内部エラーが発生しました
+              Details: []
+              Timestamp: "2023-10-01T12:00:00Z"
+
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        Error:
+          type: object
+          properties:
+            Status:
+              type: integer
+              example: 400
+            Code:
+              type: string
+              example: E-400-01
+            Message:
+              type: string
+              example: 不正なリクエスト
+            Details:
+              type: array
+              items:
+                type: object
+                properties:
+                  Field:
+                    type: string
+                    example: name
+                  Issue:
+                    type: string
+                    example: missing required field
+            Timestamp:
+              type: string
+              format: date-time
+              example: "2023-10-01T12:00:00Z"
+
+    PaintSearchCriteria:
+      type: object
+      properties:
+        BrandIds:
+          type: array
+          items:
+            type: string
+        PaintTypeIds:
+          type: array
+          items:
+            type: string
+        GlossIds:
+          type: array
+          items:
+            type: string
+        TagIds:
+          type: array
+          items:
+            type: string
+        Sort:
+          type: string
+          enum:
+            - ModelNumberAsc
+            - ModelNumberDesc
+            - NameAsc
+            - NameDesc
+          default: ModelNumberAsc
+        Page:
+          type: integer
+          default: 1
+        PageSize:
+          type: integer
+          default: 30
+          maximum: 100
+
+    PaintListResponse:
+      type: object
+      properties:
+        Items:
+          type: array
+          items:
+            type: object
+            properties:
+              Id:
+                type: string
+              Name:
+                type: string
+              ModelNumber:
+                type: string
+              Brand:
+                type: string
+              PaintType:
+                type: string
+              Gloss:
+                type: string
+              Hex:
+                type: string
+        Total:
+          type: integer
+        Page:
+          type: integer
+        PageSize:
+          type: integer
+
+    PaintResponse:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+        ModelNumber:
+          type: string
+        Brand:
+          type: string
+        PaintType:
+          type: string
+        Gloss:
+          type: string
+        Price:
+          type: number
+        Description:
+          type: string
+        Hex:
+          type: string
+        RgbR:
+          type: integer
+        RgbG:
+          type: integer
+        RgbB:
+          type: integer
+        HslH:
+          type: number
+        HslS:
+          type: number
+        HslL:
+          type: number
+        ImageUrl:
+          type: string
+        Tags:
+          type: array
+          items:
+            $ref: "#/components/schemas/TagResponse"
+        CreatedAt:
+          type: string
+          format: date-time
+        UpdatedAt:
+          type: string
+          format: date-time
+
+    TagRequest:
+      type: object
+      properties:
+        Name:
+          type: string
+        Category:
+          type: string
+        Hex:
+          type: string
+        Effect:
+          type: string
+          enum:
+            - metallic
+            - pearl
+            - fluorescent
+        Description:
+          type: string
+        UpdatedAt:
+          type: string
+          format: date-time
+        CreatedAt:
+          type: string
+          format: date-time
+
+    TagResponse:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+        Category:
+          type: string
+        Hex:
+          type: string
+        Effect:
+          type: string
+          enum:
+            - metallic
+            - pearl
+            - fluorescent
+        Description:
+          type: string
+        UpdatedAt:
+          type: string
+          format: date-time
+        CreatedAt:
+          type: string
+          format: date-time
+
+    ColorSearchCriteria:
+      type: object
+      required:
+        - R
+        - G
+        - B
+      properties:
+        R:
+          type: integer
+          minimum: 0
+          maximum: 255
+          description: 選択した色の赤成分 (0-255)。
+        G:
+          type: integer
+          minimum: 0
+          maximum: 255
+          description: 選択した色の緑成分 (0-255)。
+        B:
+          type: integer
+          minimum: 0
+          maximum: 255
+          description: 選択した色の青成分 (0-255)。
+        Threshold:
+          type: number
+          format: double
+          description: CIEDE2000 の距離の閾値。小さいほど類似度が高い。
+          default: 5
+          example: 5
+        Page:
+          type: integer
+          default: 1
+        PageSize:
+          type: integer
+          default: 30
+          maximum: 100
+
+    SimilarPaintListResponse:
+      type: object
+      properties:
+        Items:
+          type: array
+          items:
+            $ref: "#/components/schemas/SimilarPaintItem"
+        Total:
+          type: integer
+        Page:
+          type: integer
+        PageSize:
+          type: integer
+
+    SimilarPaintItem:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+        ModelNumber:
+          type: string
+        Brand:
+          type: string
+        PaintType:
+          type: string
+        Gloss:
+          type: string
+        Hex:
+          type: string
+        Similarity:
+          type: number
+          format: float
+          description: CIEDE2000 による選択色との色差（小さいほど近い）。

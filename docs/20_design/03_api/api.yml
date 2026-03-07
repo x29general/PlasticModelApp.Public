@@ -24,7 +24,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  Status:
+                  status:
                     type: string
                     example: "ok"
 
@@ -163,45 +163,45 @@ paths:
               schema:
                 type: object
                 properties:
-                  Brands:
+                  brands:
                     type: array
                     items:
                       type: object
                       properties:
-                        Id:
+                        id:
                           type: string
-                        Name:
+                        name:
                           type: string
-                  PaintTypes:
+                  paintTypes:
                     type: array
                     items:
                       type: object
                       properties:
-                        Id:
+                        id:
                           type: string
-                        Name:
+                        name:
                           type: string
-                  Glosses:
+                  glosses:
                     type: array
                     items:
                       type: object
                       properties:
-                        Id:
+                        id:
                           type: string
-                        Name:
+                        name:
                           type: string
-                  Tags:
+                  tags:
                     type: array
                     items:
                       $ref: "#/components/schemas/TagResponse"
-                  TagCategories:
+                  tagCategories:
                     type: array
                     items:
                       type: object
                       properties:
-                        Id:
+                        id:
                           type: string
-                        Name:
+                        name:
                           type: string
         "400":
           $ref: "#/components/responses/BadRequest"
@@ -224,14 +224,14 @@ components:
           schema:
             $ref: "#/components/schemas/ErrorResponse"
           example:
-            Error:
-              Status: 404
-              Code: E-404-01
-              Message: リソースが見つかりません
-              Details:
-                - Field: id
-                  Issue: "指定されたIDのペイントが存在しません"
-              Timestamp: "2023-10-01T12:00:00Z"
+            error:
+              status: 404
+              code: E-404-01
+              message: リソースが見つかりません
+              details:
+                - field: id
+                  issue: "指定されたIDのペイントが存在しません"
+              timestamp: "2023-10-01T12:00:00Z"
 
     InternalServerError:
       description: サーバー内部エラー
@@ -240,41 +240,41 @@ components:
           schema:
             $ref: "#/components/schemas/ErrorResponse"
           example:
-            Error:
-              Status: 500
-              Code: E-500-01
-              Message: サーバー内部エラーが発生しました
-              Details: []
-              Timestamp: "2023-10-01T12:00:00Z"
+            error:
+              status: 500
+              code: E-500-01
+              message: サーバー内部エラーが発生しました
+              details: []
+              timestamp: "2023-10-01T12:00:00Z"
 
   schemas:
     ErrorResponse:
       type: object
       properties:
-        Error:
+        error:
           type: object
           properties:
-            Status:
+            status:
               type: integer
               example: 400
-            Code:
+            code:
               type: string
               example: E-400-01
-            Message:
+            message:
               type: string
               example: 不正なリクエスト
-            Details:
+            details:
               type: array
               items:
                 type: object
                 properties:
-                  Field:
+                  field:
                     type: string
                     example: name
-                  Issue:
+                  issue:
                     type: string
                     example: missing required field
-            Timestamp:
+            timestamp:
               type: string
               format: date-time
               example: "2023-10-01T12:00:00Z"
@@ -282,23 +282,23 @@ components:
     PaintSearchCriteria:
       type: object
       properties:
-        BrandIds:
+        brandIds:
           type: array
           items:
             type: string
-        PaintTypeIds:
+        paintTypeIds:
           type: array
           items:
             type: string
-        GlossIds:
+        glossIds:
           type: array
           items:
             type: string
-        TagIds:
+        tagIds:
           type: array
           items:
             type: string
-        Sort:
+        sort:
           type: string
           enum:
             - ModelNumberAsc
@@ -306,10 +306,10 @@ components:
             - NameAsc
             - NameDesc
           default: ModelNumberAsc
-        Page:
+        page:
           type: integer
           default: 1
-        PageSize:
+        pageSize:
           type: integer
           default: 30
           maximum: 100
@@ -317,160 +317,160 @@ components:
     PaintListResponse:
       type: object
       properties:
-        Items:
+        items:
           type: array
           items:
             type: object
             properties:
-              Id:
+              id:
                 type: string
-              Name:
+              name:
                 type: string
-              ModelNumber:
+              modelNumber:
                 type: string
-              Brand:
+              brand:
                 type: string
-              PaintType:
+              paintType:
                 type: string
-              Gloss:
+              gloss:
                 type: string
-              Hex:
+              hex:
                 type: string
-        Total:
+        total:
           type: integer
-        Page:
+        page:
           type: integer
-        PageSize:
+        pageSize:
           type: integer
 
     PaintResponse:
       type: object
       properties:
-        Id:
+        id:
           type: string
-        Name:
+        name:
           type: string
-        ModelNumber:
+        modelNumber:
           type: string
-        Brand:
+        brand:
           type: string
-        PaintType:
+        paintType:
           type: string
-        Gloss:
+        gloss:
           type: string
-        Price:
+        price:
           type: number
-        Description:
+        description:
           type: string
-        Hex:
+        hex:
           type: string
-        RgbR:
+        rgbR:
           type: integer
-        RgbG:
+        rgbG:
           type: integer
-        RgbB:
+        rgbB:
           type: integer
-        HslH:
+        hslH:
           type: number
-        HslS:
+        hslS:
           type: number
-        HslL:
+        hslL:
           type: number
-        ImageUrl:
+        imageUrl:
           type: string
-        Tags:
+        tags:
           type: array
           items:
             $ref: "#/components/schemas/TagResponse"
-        CreatedAt:
+        createdAt:
           type: string
           format: date-time
-        UpdatedAt:
+        updatedAt:
           type: string
           format: date-time
 
     TagRequest:
       type: object
       properties:
-        Name:
+        name:
           type: string
-        Category:
+        category:
           type: string
-        Hex:
+        hex:
           type: string
-        Effect:
+        effect:
           type: string
           enum:
             - metallic
             - pearl
             - fluorescent
-        Description:
+        description:
           type: string
-        UpdatedAt:
+        updatedAt:
           type: string
           format: date-time
-        CreatedAt:
+        createdAt:
           type: string
           format: date-time
 
     TagResponse:
       type: object
       properties:
-        Id:
+        id:
           type: string
-        Name:
+        name:
           type: string
-        Category:
+        category:
           type: string
-        Hex:
+        hex:
           type: string
-        Effect:
+        effect:
           type: string
           enum:
             - metallic
             - pearl
             - fluorescent
-        Description:
+        description:
           type: string
-        UpdatedAt:
+        updatedAt:
           type: string
           format: date-time
-        CreatedAt:
+        createdAt:
           type: string
           format: date-time
 
     ColorSearchCriteria:
       type: object
       required:
-        - R
-        - G
-        - B
+        - r
+        - g
+        - b
       properties:
-        R:
+        r:
           type: integer
           minimum: 0
           maximum: 255
           description: 選択した色の赤成分 (0-255)。
-        G:
+        g:
           type: integer
           minimum: 0
           maximum: 255
           description: 選択した色の緑成分 (0-255)。
-        B:
+        b:
           type: integer
           minimum: 0
           maximum: 255
           description: 選択した色の青成分 (0-255)。
-        Threshold:
+        threshold:
           type: number
           format: double
           description: CIEDE2000 の距離の閾値。小さいほど類似度が高い。
           default: 5
           example: 5
-        Page:
+        page:
           type: integer
           default: 1
-        PageSize:
+        pageSize:
           type: integer
           default: 30
           maximum: 100
@@ -478,35 +478,35 @@ components:
     SimilarPaintListResponse:
       type: object
       properties:
-        Items:
+        items:
           type: array
           items:
             $ref: "#/components/schemas/SimilarPaintItem"
-        Total:
+        total:
           type: integer
-        Page:
+        page:
           type: integer
-        PageSize:
+        pageSize:
           type: integer
 
     SimilarPaintItem:
       type: object
       properties:
-        Id:
+        id:
           type: string
-        Name:
+        name:
           type: string
-        ModelNumber:
+        modelNumber:
           type: string
-        Brand:
+        brand:
           type: string
-        PaintType:
+        paintType:
           type: string
-        Gloss:
+        gloss:
           type: string
-        Hex:
+        hex:
           type: string
-        Similarity:
+        similarity:
           type: number
           format: float
           description: CIEDE2000 による選択色との色差（小さいほど近い）。

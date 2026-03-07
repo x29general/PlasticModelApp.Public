@@ -13,6 +13,7 @@
 | paint_type_id       | text                      | FK NOT NULL | INDEX                             | FK -> `paint_types.id` |
 | gloss_id            | text                      | FK NOT NULL | INDEX                             | FK -> `glosses.id` |
 | price               | numeric(10,2)             | NOT NULL    |                                   | |
+| net                 | numeric(10,2)             | NOT NULL    |                                   | 内容量 |
 | description         | varchar(500)              |             |                                   | |
 | image_url           | varchar(200)              |             |                                   | |
 | hex                 | varchar(7)                | NOT NULL    |                                   | |

@@ -364,18 +364,10 @@ components:
           type: string
         hex:
           type: string
-        rgbR:
-          type: integer
-        rgbG:
-          type: integer
-        rgbB:
-          type: integer
-        hslH:
-          type: number
-        hslS:
-          type: number
-        hslL:
-          type: number
+        rgb:
+          $ref: "#/components/schemas/RgbColor"
+        hsl:
+          $ref: "#/components/schemas/HslColor"
         imageUrl:
           type: string
         tags:
@@ -388,6 +380,32 @@ components:
         updatedAt:
           type: string
           format: date-time
+
+    RgbColor:
+      type: object
+      properties:
+        r:
+          type: integer
+          minimum: 0
+          maximum: 255
+        g:
+          type: integer
+          minimum: 0
+          maximum: 255
+        b:
+          type: integer
+          minimum: 0
+          maximum: 255
+
+    HslColor:
+      type: object
+      properties:
+        h:
+          type: number
+        s:
+          type: number
+        l:
+          type: number
 
     TagRequest:
       type: object

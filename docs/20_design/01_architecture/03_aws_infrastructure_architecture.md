@@ -73,7 +73,6 @@ flowchart TB
 - WAF
 - CloudWatch Metrics / Alarm
 - CloudTrail
-- ECS Auto Scaling
 - Terraform
 
 ### 拡張構成図

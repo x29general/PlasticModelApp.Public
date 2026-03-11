@@ -121,7 +121,7 @@ flowchart TB
     Actions --> ECR
     ECR --> ECS
     Actions --> S3
-    Trail --> AWS
+    Trail --> Logs
 ```
 
 ## 4. 採用サービス一覧
